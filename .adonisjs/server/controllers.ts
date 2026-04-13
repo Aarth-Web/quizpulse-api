@@ -4,7 +4,9 @@
  */
 
 export const controllers = {
-  AccessToken: () => import('#controllers/access_token_controller'),
-  NewAccount: () => import('#controllers/new_account_controller'),
-  Profile: () => import('#controllers/profile_controller'),
+  Auth: () => import('#controllers/auth_controller'),
+  Leaderboard: () => import('#controllers/leaderboard_controller'),
+  Quiz: () => import('#controllers/quiz_controller'),
+  Session: () => import('#controllers/session_controller'),
+  User: () => import('#controllers/user_controller'),
 }

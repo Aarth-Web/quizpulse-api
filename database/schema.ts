@@ -7,6 +7,25 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class AnswerSchema extends BaseModel {
+  static $columns = ['answeredAt', 'chosenIndex', 'id', 'isCorrect', 'participantId', 'questionId', 'sessionId'] as const
+  $columns = AnswerSchema.$columns
+  @column.dateTime()
+  declare answeredAt: DateTime
+  @column()
+  declare chosenIndex: number
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare isCorrect: boolean
+  @column()
+  declare participantId: string
+  @column()
+  declare questionId: string
+  @column()
+  declare sessionId: string
+}
+
 export class AuthAccessTokenSchema extends BaseModel {
   static $columns = ['abilities', 'createdAt', 'expiresAt', 'hash', 'id', 'lastUsedAt', 'name', 'tokenableId', 'type', 'updatedAt'] as const
   $columns = AuthAccessTokenSchema.$columns
@@ -25,26 +44,150 @@ export class AuthAccessTokenSchema extends BaseModel {
   @column()
   declare name: string | null
   @column()
-  declare tokenableId: number
+  declare tokenableId: string
   @column()
   declare type: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
 
+export class LeaderboardSchema extends BaseModel {
+  static $columns = ['gamesPlayed', 'id', 'totalScore', 'updatedAt', 'userId', 'wins'] as const
+  $columns = LeaderboardSchema.$columns
+  @column()
+  declare gamesPlayed: number
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare totalScore: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare userId: string
+  @column()
+  declare wins: number
+}
+
+export class QuestionSchema extends BaseModel {
+  static $columns = ['correctIndex', 'id', 'options', 'order', 'points', 'quizId', 'text'] as const
+  $columns = QuestionSchema.$columns
+  @column()
+  declare correctIndex: number
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare options: any
+  @column()
+  declare order: number
+  @column()
+  declare points: number
+  @column()
+  declare quizId: string
+  @column()
+  declare text: string
+}
+
+export class QuizSessionSchema extends BaseModel {
+  static $columns = ['createdAt', 'endedAt', 'hostUserId', 'id', 'inviteCode', 'quizId', 'startedAt', 'status', 'updatedAt'] as const
+  $columns = QuizSessionSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare endedAt: DateTime | null
+  @column()
+  declare hostUserId: string
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare inviteCode: string
+  @column()
+  declare quizId: string
+  @column.dateTime()
+  declare startedAt: DateTime | null
+  @column()
+  declare status: any
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
+export class QuizSchema extends BaseModel {
+  static $columns = ['category', 'createdAt', 'description', 'difficulty', 'id', 'questionCount', 'title', 'updatedAt'] as const
+  $columns = QuizSchema.$columns
+  @column()
+  declare category: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare description: string | null
+  @column()
+  declare difficulty: any
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare questionCount: number
+  @column()
+  declare title: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
+export class RefreshTokenSchema extends BaseModel {
+  static $columns = ['createdAt', 'expiresAt', 'id', 'revoked', 'tokenHash', 'userId'] as const
+  $columns = RefreshTokenSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare expiresAt: DateTime
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare revoked: boolean
+  @column()
+  declare tokenHash: string
+  @column()
+  declare userId: string
+}
+
+export class SessionParticipantSchema extends BaseModel {
+  static $columns = ['createdAt', 'finishedAt', 'id', 'isWinner', 'rank', 'score', 'sessionId', 'userId'] as const
+  $columns = SessionParticipantSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare finishedAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare isWinner: boolean
+  @column()
+  declare rank: number | null
+  @column()
+  declare score: number
+  @column()
+  declare sessionId: string
+  @column()
+  declare userId: string
+}
+
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
+  static $columns = ['avatarIndex', 'createdAt', 'email', 'id', 'name', 'passwordHash', 'provider', 'providerId', 'updatedAt'] as const
   $columns = UserSchema.$columns
+  @column()
+  declare avatarIndex: number
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column()
   declare email: string
-  @column()
-  declare fullName: string | null
   @column({ isPrimary: true })
-  declare id: number
-  @column({ serializeAs: null })
-  declare password: string
+  declare id: string
+  @column()
+  declare name: string | null
+  @column()
+  declare passwordHash: string | null
+  @column()
+  declare provider: any
+  @column()
+  declare providerId: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime | null
+  declare updatedAt: DateTime
 }
