@@ -3,6 +3,36 @@
   "compilerOptions": {
     "rootDir": "./",
     "jsx": "react",
-    "outDir": "./build"
-  }
+    "outDir": "./build",
+    "paths": {
+      "#abilities/*": ["./app/abilities/*"],
+      "#config/*": ["./config/*"],
+      "#constants/*": ["./app/constants/*"],
+      "#controllers/*": ["./app/controllers/*"],
+      "#database/*": ["./database/*"],
+      "#events/*": ["./app/events/*"],
+      "#exceptions/*": ["./app/exceptions/*"],
+      "#helpers/*": ["./app/helpers/*"],
+      "#generated/*": ["./.adonisjs/server/*"],
+      "#listeners/*": ["./app/listeners/*"],
+      "#mails/*": ["./app/mails/*"],
+      "#middleware/*": ["./app/middleware/*"],
+      "#models/*": ["./app/models/*"],
+      "#policies/*": ["./app/policies/*"],
+      "#providers/*": ["./providers/*"],
+      "#services/*": ["./app/services/*"],
+      "#start/*": ["./start/*"],
+      "#tests/*": ["./tests/*"],
+      "#transformers/*": ["./app/transformers/*"],
+      "#validators/*": ["./app/validators/*"]
+    }
+  },
+  "include": ["./**/*", "./.adonisjs/server/**/*"],
+  "exclude": [
+    "./inertia/**",
+    "./node_modules/**",
+    "./build/**",
+    "./bower_components/**",
+    "./jspm_packages/**"
+  ]
 }
