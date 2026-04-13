@@ -1,26 +1,23 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'users'
+  protected tableName = 'quiz_sessions'
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary().defaultTo(this.raw('gen_random_uuid()'))
-      table.string('email', 254).notNullable().unique()
-      table.string('password_hash').nullable()
-      table.string('name').nullable()
+      table.uuid('quiz_id').notNullable().references('id').inTable('quizzes')
+      table.uuid('host_user_id').notNullable().references('id').inTable('users')
       table
-        .integer('avatar_index')
-        .notNullable()
-        .defaultTo(this.raw('(floor(random() * 10))::integer'))
-      table
-        .enu('provider', ['local', 'google'], {
+        .enu('status', ['WAITING', 'ACTIVE', 'DONE'], {
           useNative: true,
-          enumName: 'users_provider_enum',
+          enumName: 'quiz_sessions_status_enum',
         })
         .notNullable()
-        .defaultTo('local')
-      table.string('provider_id').nullable().index()
+        .defaultTo('WAITING')
+      table.string('invite_code').notNullable().unique()
+      table.timestamp('started_at', { useTz: true }).nullable()
+      table.timestamp('ended_at', { useTz: true }).nullable()
 
       table.timestamp('created_at', { useTz: true }).notNullable().defaultTo(this.now())
       table.timestamp('updated_at', { useTz: true }).notNullable().defaultTo(this.now())
@@ -30,7 +27,7 @@ export default class extends BaseSchema {
   async down() {
     this.schema.dropTable(this.tableName)
     this.defer(async (db) => {
-      await db.rawQuery('DROP TYPE IF EXISTS users_provider_enum').exec()
+      await db.rawQuery('DROP TYPE IF EXISTS quiz_sessions_status_enum').exec()
     })
   }
 }
