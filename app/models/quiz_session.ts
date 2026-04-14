@@ -10,6 +10,9 @@ export default class QuizSession extends QuizSessionSchema {
   @belongsTo(() => Quiz)
   declare quiz: BelongsTo<typeof Quiz>
 
-  @hasMany(() => SessionParticipant)
+  @hasMany(() => SessionParticipant, {
+    foreignKey: 'sessionId',
+    localKey: 'id',
+  })
   declare participants: HasMany<typeof SessionParticipant>
 }

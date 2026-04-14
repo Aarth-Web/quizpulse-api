@@ -10,6 +10,14 @@ export default class AuthController {
   async register({ request, response }: HttpContext) {
     const { email, password, name } = await request.validateUsing(registerValidator)
 
+    const existing = await User.query().where({ email }).first()
+    if (existing) {
+      throw new Exception('Validation failed', {
+        status: 422,
+        code: 'E_VALIDATION_ERROR',
+      })
+    }
+
     const user = await User.create({
       email,
       passwordHash: password,

@@ -7,9 +7,15 @@ import User from '#models/user'
 export default class SessionParticipant extends SessionParticipantSchema {
   static table = 'session_participants'
 
-  @belongsTo(() => QuizSession)
+  @belongsTo(() => QuizSession, {
+    foreignKey: 'sessionId',
+    localKey: 'id',
+  })
   declare session: BelongsTo<typeof QuizSession>
 
-  @belongsTo(() => User)
+  @belongsTo(() => User, {
+    foreignKey: 'userId',
+    localKey: 'id',
+  })
   declare user: BelongsTo<typeof User>
 }
