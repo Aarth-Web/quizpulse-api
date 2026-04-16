@@ -8,6 +8,15 @@ import {
 import { getApiErrorMessage } from "../../types/api";
 import type { Session } from "./types";
 
+/** Create/join responses may omit `participants`; normalize before storing. */
+function normalizeSession(session: Session): Session {
+  const participants = session.participants;
+  return {
+    ...session,
+    participants: Array.isArray(participants) ? participants : [],
+  };
+}
+
 type SessionState = {
   currentSession: Session | null;
   isLoading: boolean;
@@ -62,7 +71,10 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         return { ok: false, error: message };
       }
 
-      set({ isActionLoading: false, currentSession: result.data });
+      set({
+        isActionLoading: false,
+        currentSession: normalizeSession(result.data),
+      });
       return { ok: true, sessionId: result.data.id };
     } catch (error) {
       const message = getErrorMessage(error, "Unable to create session.");
@@ -83,7 +95,10 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         return { ok: false, error: message };
       }
 
-      set({ isActionLoading: false, currentSession: result.data });
+      set({
+        isActionLoading: false,
+        currentSession: normalizeSession(result.data),
+      });
       return { ok: true, sessionId: result.data.id };
     } catch (error) {
       const message = getErrorMessage(error, "Unable to join session.");
@@ -104,7 +119,11 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         return { ok: false, error: message };
       }
 
-      set({ isLoading: false, currentSession: result.data, error: null });
+      set({
+        isLoading: false,
+        currentSession: normalizeSession(result.data),
+        error: null,
+      });
       return { ok: true };
     } catch (error) {
       const message = getErrorMessage(error, "Unable to fetch session state.");
@@ -128,9 +147,9 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       const previous = get().currentSession;
       set({
         isActionLoading: false,
-        currentSession: previous
-          ? { ...previous, ...result.data }
-          : result.data,
+        currentSession: normalizeSession(
+          previous ? { ...previous, ...result.data } : result.data,
+        ),
         error: null,
       });
       return { ok: true };
