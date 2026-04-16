@@ -1,0 +1,8 @@
+type StatusBadgeProps = {
+  label: string;
+  tone?: "default" | "success" | "warning";
+};
+
+export function StatusBadge({ label, tone = "default" }: StatusBadgeProps) {
+  return <span className={`status-badge tone-${tone}`}>{label}</span>;
+}
