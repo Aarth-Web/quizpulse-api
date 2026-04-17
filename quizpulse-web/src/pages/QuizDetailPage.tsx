@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { SectionHeader } from "../components/SectionHeader";
 import { StatusBadge } from "../components/StatusBadge";
 import { useToastStore } from "../components/toastStore";
@@ -9,6 +9,7 @@ import { useSessionStore } from "../features/session/store";
 
 export function QuizDetailPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams<{ id: string }>();
   const selectedQuiz = useQuizStore((state) => state.selectedQuiz);
   const isLoadingDetail = useQuizStore((state) => state.isLoadingDetail);
@@ -48,7 +49,10 @@ export function QuizDetailPage() {
     }
 
     if (authMode !== "user") {
-      addToast("Only registered users can host a quiz session.", "error");
+      addToast("Login required to host a session.", "error");
+      navigate("/auth", {
+        state: { redirectTo: location.pathname + location.search },
+      });
       return;
     }
 

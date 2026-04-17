@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useToastStore } from "../components/toastStore";
 import { useAuthStore } from "../features/auth/store";
 import { useSessionStore } from "../features/session/store";
 
 export function HomePage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const authMode = useAuthStore((state) => state.authMode);
   const joinSessionByInviteCode = useSessionStore(
     (state) => state.joinSessionByInviteCode,
@@ -20,10 +21,12 @@ export function HomePage() {
     setJoinError(null);
 
     if (authMode !== "user") {
-      const message =
-        "Session join requires a registered user account. Please login/register.";
+      const message = "Login required to join a session.";
       setJoinError(message);
       addToast(message, "error");
+      navigate("/auth", {
+        state: { redirectTo: location.pathname + location.search },
+      });
       return;
     }
 

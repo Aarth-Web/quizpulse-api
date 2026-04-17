@@ -1,11 +1,12 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../features/auth/store";
 import { useToastStore } from "../components/toastStore";
 
 export function AuthPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const register = useAuthStore((state) => state.register);
   const login = useAuthStore((state) => state.login);
   const loginGuest = useAuthStore((state) => state.loginGuest);
@@ -24,6 +25,11 @@ export function AuthPage() {
     "register" | "login" | "guest" | null
   >(null);
   const [error, setError] = useState<string | null>(null);
+  const redirectTo =
+    typeof (location.state as { redirectTo?: unknown } | null)?.redirectTo ===
+    "string"
+      ? (location.state as { redirectTo: string }).redirectTo
+      : null;
 
   async function handleRegister(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -41,7 +47,7 @@ export function AuthPage() {
     }
 
     addToast("Registration successful.", "success");
-    navigate("/profile");
+    navigate(redirectTo ?? "/profile", { replace: true });
   }
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
@@ -60,7 +66,7 @@ export function AuthPage() {
     }
 
     addToast("Logged in successfully.", "success");
-    navigate("/profile");
+    navigate(redirectTo ?? "/profile", { replace: true });
   }
 
   async function handleGuestLogin() {

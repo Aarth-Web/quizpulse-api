@@ -8,15 +8,17 @@ type NavLinkItem = {
 };
 
 export function AppLayout() {
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const authMode = useAuthStore((state) => state.authMode);
   const currentUser = useAuthStore((state) => state.currentUser);
   const logout = useAuthStore((state) => state.logout);
-  const isLoggedIn = Boolean(currentUser);
+  const isLoggedIn = Boolean(accessToken);
 
   const links: NavLinkItem[] = [
     { to: "/", label: "Home", end: true },
     { to: "/quizzes", label: "Quizzes" },
     { to: "/leaderboard", label: "Leaderboard" },
-    isLoggedIn
+    authMode === "user" && currentUser
       ? { to: "/profile", label: "Profile" }
       : { to: "/auth", label: "Login/Register" },
   ];

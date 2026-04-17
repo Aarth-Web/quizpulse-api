@@ -76,9 +76,8 @@ export function setupApiInterceptors(options: InterceptorOptions) {
 
       const { authMode, refreshToken } = options.getTokens();
       if (authMode !== "user" || !refreshToken) {
-        options.onLogout();
         if (!request.skipGlobalErrorToast) {
-          notifyError("Session expired. Please login again.");
+          notifyError("Login required to continue.");
         }
         return Promise.reject(error);
       }

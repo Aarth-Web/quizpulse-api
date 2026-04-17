@@ -53,12 +53,12 @@ export function App() {
 
   useEffect(() => {
     const token = useAuthStore.getState().accessToken;
-    if (!token || currentUser) {
+    if (!token || currentUser || authMode !== "user") {
       return;
     }
 
     void fetchCurrentUser().then((result) => {
-      if (!result.ok && authMode === "user" && refreshToken) {
+      if (!result.ok && refreshToken) {
         logout();
       }
     });
